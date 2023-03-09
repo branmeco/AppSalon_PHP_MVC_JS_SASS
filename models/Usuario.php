@@ -66,11 +66,11 @@ class Usuario extends ActiveRecord
 
         if ($resultado->num_rows) {
             self::$alertas['error'][] = 'El Usuario ya esta registrado';
-        } else {
-            //No esta registrado
-            
         }
 
         return $resultado;
+    }
+    public function hashPassword(){
+        $this->password = password_hash($this->password, PASSWORD_BCRYPT);
     }
 }
