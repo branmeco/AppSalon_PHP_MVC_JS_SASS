@@ -6,6 +6,7 @@ foreach ($alertas as $key => $mensajes) :
         <div class="alerta <?php echo $key; ?>">
             <?php echo $mensaje; ?>
         </div>
+        
 <?php
     endforeach;
 endforeach;

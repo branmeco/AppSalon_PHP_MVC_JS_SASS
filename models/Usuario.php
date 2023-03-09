@@ -37,18 +37,20 @@ class Usuario extends ActiveRecord
 
     public function validarNuevaCuenta(){
         if(!$this->nombre){
-            self::$alertas['error'][]='El Nombre del Cliente es Obligatorio';
+            self::$alertas['error'][]='El Nombre es Obligatorio';
         }
         if(!$this->apellido){
-            self::$alertas['error'][]='El apellido del Cliente es Obligatorio';
+            self::$alertas['error'][]='El apellido es Obligatorio';
         }
         if(!$this->email){
-            self::$alertas['error'][]='El email del Cliente es Obligatorio';
+            self::$alertas['error'][]='El email es Obligatorio';
         }
         if(!$this->telefono){
-            self::$alertas['error'][]='El telefono del Cliente es Obligatorio';
+            self::$alertas['error'][]='El Password es Obligatorio';
         }
-
+        if(strlen($this->password) > 6){
+            self::$alertas['error'][] = 'El password debe contener al menos 6 caracteres';
+        }
 
 
         return self::$alertas;
