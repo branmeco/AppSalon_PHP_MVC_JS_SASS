@@ -57,11 +57,12 @@ class Usuario extends ActiveRecord
         return self::$alertas;
     }
 
-    public function validarLogin(){
-        if(!$this->email){
+    public function validarLogin()
+    {
+        if (!$this->email) {
             self::$alertas['error'][] = 'El email es Obligatorio';
         }
-        if(!$this->password){
+        if (!$this->password) {
             self::$alertas['error'][] = 'El password es Obligatorio';
         }
 
@@ -81,15 +82,23 @@ class Usuario extends ActiveRecord
 
         return $resultado;
     }
-    public function hashPassword(){
+    public function hashPassword()
+    {
         $this->password = password_hash($this->password, PASSWORD_BCRYPT);
     }
-    public function crearToken(){
+    public function crearToken()
+    {
         $this->token = uniqid();
     }
 
-    public function comprobarPasswordAndVerificado($password){
+    public function comprobarPasswordAndVerificado($password)
+    {
         $resultado = password_verify($password, $this->password);
-        debuguear($resultado);
+
+        if (!$resultado || !$this->confirmado) {
+            self::$alertas['error'][] = 'Password Incorrecto o tu cuenta no ha sido confirmado';
+        } else {
+            return true;
+        }
     }
 }
