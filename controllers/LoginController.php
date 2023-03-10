@@ -33,14 +33,13 @@ class LoginController
                         $_SESSION['login'] = true;
 
                         //Redireccionamiento
-                        if($usuario->admin === "1"){
+                        if ($usuario->admin === "1") {
                             $_SESSION['admin'] = $usuario->admin ?? null;
 
                             header('Location: /admin');
-                        }else{
+                        } else {
                             header('Location: /cita');
                         }
-
                     } else {
                         Usuario::setAlerta('error', 'Usuario no encontrado');
                     }
@@ -62,15 +61,26 @@ class LoginController
     {
         $alertas = [];
 
-        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $auth = new Usuario($_POST);
-            $alertas = $auth -> validarEmail();
+            $alertas = $auth->validarEmail();
 
-            if(empty($alertas)){
-                
+            if (empty($alertas)) {
+                $usuario = Usuario::where('email', $auth->email);
+
+                if ($usuario && $usuario->confirmado === "1") {
+
+                    //Generar un token
+                    $usuario->crearToken();
+                    $usuario->guardar();
+
+                    Usuario::setAlerta('exito', 'Revisa tu email');
+                } else {
+                    Usuario::setAlerta('error', 'El usuario no existe o no esta confirmado');
+                }
             }
-
         }
+        $alertas = Usuario::getAlertas();
 
         $router->render('auth/olvide-password', [
             'alertas' => $alertas
