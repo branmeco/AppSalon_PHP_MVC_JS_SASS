@@ -12,25 +12,40 @@ class LoginController
     {
         $alertas = [];
 
-        if($_SERVER['REQUEST_METHOD']='POST'){
+        if ($_SERVER['REQUEST_METHOD'] = 'POST') {
             $auth = new Usuario($_POST);
 
             $alertas = $auth->validarLogin();
 
-            if(empty($alertas)){
+            if (empty($alertas)) {
                 //Comprobar que existe el usuario
                 $usuario = Usuario::where('email', $auth->email);
 
-                if($usuario){
+                if ($usuario) {
                     //Verificar el password
-                    if($usuario->comprobarPasswordAndVerificado($auth->password)){
+                    if ($usuario->comprobarPasswordAndVerificado($auth->password)) {
+                        //Autenticar el usuario
+                        session_start();
 
+                        $_SESSION['id'] = $usuario->id;
+                        $_SESSION['nombre'] = $usuario->nombre . " " . $usuario->apellido;
+                        $_SESSION['email'] = $usuario->email;
+                        $_SESSION['login'] = true;
+
+                        //Redireccionamiento
+                        if($usuario->admin === "1"){
+                            $_SESSION['admin'] = $usuario->admin ?? null;
+
+                            header('Location: /admin');
+                        }else{
+                            header('Location: /cita');
+                        }
+
+                    } else {
+                        Usuario::setAlerta('error', 'Usuario no encontrado');
                     }
-                }else {
-                    Usuario::setAlerta('error', 'Usuario no encontrado');
                 }
             }
-
         }
 
         $alertas = Usuario::getAlertas();
@@ -58,18 +73,18 @@ class LoginController
         //Alertas vacias
         $alertas = [];
 
-        if($_SERVER['REQUEST_METHOD']==='POST'){
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $usuario->sincronizar($_POST);
             $alertas = $usuario->validarNuevaCuenta();
 
             //Revisar que alertas este vacio
-            if(empty($alertas)){
+            if (empty($alertas)) {
                 //Verificar que el usuario no este registrado
                 $resultado = $usuario->existeUsuario();
 
-                if($resultado -> num_rows){
+                if ($resultado->num_rows) {
                     $alertas = Usuario::getAlertas();
-                }else {
+                } else {
                     //Hashear el password
                     $usuario->hashPassword();
 
@@ -84,7 +99,7 @@ class LoginController
                     //Crear el usuario
                     $resultado = $usuario->guardar();
 
-                    if($resultado){
+                    if ($resultado) {
                         header('Location: /mensaje');
                     }
                 }
@@ -95,21 +110,23 @@ class LoginController
             'alertas' => $alertas
         ]);
     }
-    public static function mensaje(Router $router) {
-        $router ->render('auth/mensaje');
+    public static function mensaje(Router $router)
+    {
+        $router->render('auth/mensaje');
     }
 
-    public static function confirmar(Router $router){
-        $alertas = []; 
+    public static function confirmar(Router $router)
+    {
+        $alertas = [];
 
         $token = s($_GET['token']);
 
         $usuario = Usuario::where('token', $token);
 
-        if(empty($usuario)){
+        if (empty($usuario)) {
             //Mostrar mensaje de error
             Usuario::setAlerta('error', 'Token No Válido');
-        }else{
+        } else {
             //Modificar a usuario confirmado
             $usuario->confirmado = "1";
             $usuario->token = null;
