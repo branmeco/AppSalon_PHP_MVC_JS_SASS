@@ -34,4 +34,8 @@
         <h2>Resumen</h2>
         <p>Verifica que la información se correcta</p>
     </div>
+    <div class="paginacion">
+        <button id="anterior" class="boton">&laquo; Anterior</button>
+        <button id="siguiente" class="boton">Anterior &raquo;</button>
+    </div>
 </div>
