@@ -1,25 +1,33 @@
 let paso = 1;
 
-document.addEventListener('DOMContentLoaded', function(){
+document.addEventListener('DOMContentLoaded', function () {
     iniciarApp();
 });
 
-const iniciarApp = () => {
-    tabs(); //Cambia la sección cuando se presione los tabs
+function iniciarApp() {
+    tabs(); //Cambia la seccion cuando se presionen los tabs
 }
 
-const mostrarSeccion = () => {
-    console.log('Mostrando seccion...');
+function mostrarSeccion() {
+
+    //Ocultar la sección que tenga la clase de mostrar
+    const seccionAnterior = document.querySelector('.mostrar');
+    if (seccionAnterior) {
+        seccionAnterior.classList.remove('mostrar');
+    }
+
+    //Seleccionar la sección con el paso...
+    const pasoSelector = `#paso-${paso}`;
+    const seccion = document.querySelector(pasoSelector);
+    seccion.classList.add('mostrar');
 }
 
-const tabs = () => {
+function tabs() {
     const botones = document.querySelectorAll('.tabs button');
-
-    botones.forEach(boton =>{
-        boton.addEventListener('click', function(e){
+    botones.forEach(boton => {
+        boton.addEventListener('click', function (e) {
             paso = parseInt(e.target.dataset.paso);
-
             mostrarSeccion();
         });
-    });
+    })
 }
