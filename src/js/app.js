@@ -94,21 +94,21 @@ function paginaSiguiente() {
     });
 }
 
-async function consultarAPI(){
+async function consultarAPI() {
     try {
-        const url  = 'http://localhost:3000/api/servicios';
+        const url = 'http://localhost:3000/api/servicios';
         const resultado = await fetch(url);
         const servicios = await resultado.json();
         mostrarServicios(servicios);
 
-    }catch(error){
+    } catch (error) {
         console.log(error);
     }
 }
 
-function mostrarServicios(servicios){
+function mostrarServicios(servicios) {
     servicios.forEach(servicio => {
-        const {id, nombre, precio} = servicio;
+        const { id, nombre, precio } = servicio;
 
         const nombreServicio = document.createElement('P');
         nombreServicio.classList.add('nombre-servicio');
@@ -121,7 +121,7 @@ function mostrarServicios(servicios){
         const servicioDiv = document.createElement('DIV');
         servicioDiv.classList.add('servicio');
         servicioDiv.dataset.idServicio = id;
-        servicioDiv.onclick = function (){
+        servicioDiv.onclick = function () {
             seleccionarServicio(servicio);
         }
 
@@ -133,14 +133,24 @@ function mostrarServicios(servicios){
     });
 }
 
-function seleccionarServicio(servicio){
-    const {id} = servicio;
-    const {servicios} = cita;
-
-    cita.servicios = [...servicios, servicio];
-
+function seleccionarServicio(servicio) {
+    const { id } = servicio;
+    const { servicios } = cita;
+    
+    //Identificar el elemento al que se le da click
     const divServicio = document.querySelector(`[data-id-servicio="${id}"]`);
-    divServicio.classList.add('seleccionado');
+
+    //Comprobar si un servicio ya fue agregado o quitado
+    if (servicios.some(agregado => agregado.id === id)) {
+        //Eliminarlo
+        cita.servicios = servicios.filter(agregado=>agregado.id !== id);
+        divServicio.classList.remove('seleccionado');
+    } else {
+        //Agregarlo
+        cita.servicios = [...servicios, servicio];
+        divServicio.classList.add('seleccionado');
+    }
+
 
     console.log(cita);
 }
