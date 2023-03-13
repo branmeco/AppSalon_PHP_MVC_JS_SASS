@@ -21,6 +21,8 @@ function iniciarApp() {
     paginaAnterior();
 
     consultarAPI(); // Consulta la API en el backend de PHP
+
+    nombreCliente();
 }
 
 function mostrarSeccion() {
@@ -136,14 +138,14 @@ function mostrarServicios(servicios) {
 function seleccionarServicio(servicio) {
     const { id } = servicio;
     const { servicios } = cita;
-    
+
     //Identificar el elemento al que se le da click
     const divServicio = document.querySelector(`[data-id-servicio="${id}"]`);
 
     //Comprobar si un servicio ya fue agregado o quitado
     if (servicios.some(agregado => agregado.id === id)) {
         //Eliminarlo
-        cita.servicios = servicios.filter(agregado=>agregado.id !== id);
+        cita.servicios = servicios.filter(agregado => agregado.id !== id);
         divServicio.classList.remove('seleccionado');
     } else {
         //Agregarlo
@@ -155,3 +157,6 @@ function seleccionarServicio(servicio) {
     console.log(cita);
 }
 
+function nombreCliente() {
+    cita.nombre = document.querySelector('#nombre').value;
+}
