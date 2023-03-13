@@ -15,8 +15,12 @@
     transition-property: transform;
     transition-duration: 300ms;
     text-align: center;
-    @include m.tablet {
-      text-align: left;
+
+    &.seleccionado {
+      background-color: v.$azul;
+      p {
+        color: v.$blanco;
+      }
     }
 
     &:hover {
