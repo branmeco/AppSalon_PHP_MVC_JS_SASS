@@ -288,7 +288,19 @@ const mostrarResumen = () => {
     const horaCita = document.createElement('P');
     horaCita.innerHTML = `<span>Hora:</span> ${hora} Horas`;
 
+    //Botón para crear una cita
+    const botonReservar = document.createElement('BUTTON');
+    botonReservar.classList.add = ('boton');
+    botonReservar.textContent = 'Resercar cita';
+    botonReservar.onclick = reservarCita;
+
     resumen.appendChild(nombreCliente);
     resumen.appendChild(fechaCita);
     resumen.appendChild(horaCita);
+
+    resumen.appendChild(botonReservar);
+}
+
+const reservarCita = () => {
+    console.log('first');
 }
