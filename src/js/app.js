@@ -105,7 +105,7 @@ const paginaSiguiente = () => {
     });
 }
 
-const consultarAPI = async() => {
+const consultarAPI = async () => {
     try {
         const url = 'http://localhost:3000/api/servicios';
         const resultado = await fetch(url);
@@ -169,14 +169,14 @@ const nombreCliente = () => {
 
 const seleccionarFecha = () => {
     const inputFecha = document.querySelector('#fecha');
-    inputFecha.addEventListener('input', function(e) {
+    inputFecha.addEventListener('input', function (e) {
 
         const dia = new Date(e.target.value).getUTCDay();
 
-        if([6, 0].includes(dia)){
+        if ([6, 0].includes(dia)) {
             e.target.value = '';
-            mostrarAlerta('Fines de semana no permitimos', 'error');
-        }else {
+            mostrarAlerta('Fines de semana no permitimos', 'error', '.formulario');
+        } else {
             cita.fecha = e.target.value;
         }
     });
@@ -184,12 +184,12 @@ const seleccionarFecha = () => {
 
 const seleccionarHora = () => {
     const inputHora = document.querySelector('#hora');
-    inputHora.addEventListener('input', function(e){
+    inputHora.addEventListener('input', function (e) {
 
         const horaCita = e.target.value;
         const hora = horaCita.split(":")[0];
-        if(hora < 9 || hora > 18){
-            mostrarAlerta('Hora no válida', 'error');
+        if (hora < 9 || hora > 18) {
+            mostrarAlerta('Hora no válida', 'error', '.formulario');
         } else {
             cita.hora = e.target.value;
         }
@@ -197,32 +197,37 @@ const seleccionarHora = () => {
 
 }
 
-const mostrarAlerta = (mensaje, tipo) => {
+const mostrarAlerta = (mensaje, tipo, elemento, desaparece = true) => {
 
     //Previene que se generen más de 1 alerta
     const alertaPrevia = document.querySelector('.alerta');
-    if(alertaPrevia) return;
-    
+    if (alertaPrevia){
+        alertaPrevia.remove();
+    }
+
     //Scripting para crear la alerta
     const alerta = document.createElement('DIV');
     alerta.textContent = mensaje;
     alerta.classList.add('alerta');
     alerta.classList.add(tipo);
 
-    const formulario = document.querySelector('#paso-2 p ');
-    formulario.appendChild(alerta);
+    const referencia = document.querySelector(elemento);
+    referencia.appendChild(alerta);
 
-    //Eliminar la alerta
-    setTimeout(() => {
-        alerta.remove();
-    }, 3000);
+    if (desaparece) {
+        //Eliminar la alerta
+        setTimeout(() => {
+            alerta.remove();
+        }, 3000);
+    }
+
 }
 
 const mostrarResumen = () => {
     const resumen = document.querySelector('.contenido-resumen');
 
-    if(Object.values(cita).includes('')){
-        console.log('Hacen falta datos');
+    if (Object.values(cita).includes('') || cita.servicios.length === 0) {
+        mostrarAlerta('Falta datos de Servicios, Fecha u Hora', 'error', '.contenido-resumen', false);
     } else {
         console.log('Todo bien');
     }
