@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
     iniciarApp();
 });
 
-function iniciarApp() {
+const iniciarApp = () => {
     mostrarSeccion(); // Mostrar y oculta las secciones
     tabs(); // Cambia la seccion cuando se presionen los tabs
     botonesPaginador(); //Agrega o quita los botones del paginador
@@ -25,9 +25,11 @@ function iniciarApp() {
     nombreCliente(); // Añade el nombre del cliente al objeto de cita
     seleccionarFecha(); //Añade la fecha de la cita en el objeto
     seleccionarHora(); //Añade la hora de la cita en el objeto
+
+    mostrarResumen(); //Muestra el resumen de la cita
 }
 
-function mostrarSeccion() {
+const mostrarSeccion = () => {
 
     //Ocultar la sección que tenga la clase de mostrar
     const seccionAnterior = document.querySelector('.mostrar');
@@ -51,18 +53,21 @@ function mostrarSeccion() {
     tab.classList.add('actual');
 }
 
-function tabs() {
+const tabs = () => {
     const botones = document.querySelectorAll('.tabs button');
     botones.forEach(boton => {
         boton.addEventListener('click', function (e) {
+            e.preventDefault();
+
             paso = parseInt(e.target.dataset.paso);
             mostrarSeccion();
+
             botonesPaginador();
         });
     });
 }
 
-function botonesPaginador() {
+const botonesPaginador = () => {
     const paginaAnterior = document.querySelector('#anterior');
     const paginaSiguiente = document.querySelector('#siguiente');
 
@@ -72,6 +77,8 @@ function botonesPaginador() {
     } else if (paso == 3) {
         paginaAnterior.classList.remove('ocultar');
         paginaSiguiente.classList.add('ocultar');
+
+        mostrarResumen();
     } else {
         paginaAnterior.classList.remove('ocultar');
         paginaSiguiente.classList.remove('ocultar');
@@ -80,7 +87,7 @@ function botonesPaginador() {
     mostrarSeccion();
 }
 
-function paginaAnterior() {
+const paginaAnterior = () => {
     const paginaAnterior = document.querySelector('#anterior');
     paginaAnterior.addEventListener('click', function () {
         if (paso <= pasoInicial) return;
@@ -89,7 +96,7 @@ function paginaAnterior() {
     });
 }
 
-function paginaSiguiente() {
+const paginaSiguiente = () => {
     const paginaSiguiente = document.querySelector('#siguiente');
     paginaSiguiente.addEventListener('click', function () {
         if (paso >= pasoFinal) return;
@@ -98,7 +105,7 @@ function paginaSiguiente() {
     });
 }
 
-async function consultarAPI() {
+const consultarAPI = async() => {
     try {
         const url = 'http://localhost:3000/api/servicios';
         const resultado = await fetch(url);
@@ -110,7 +117,7 @@ async function consultarAPI() {
     }
 }
 
-function mostrarServicios(servicios) {
+const mostrarServicios = (servicios) => {
     servicios.forEach(servicio => {
         const { id, nombre, precio } = servicio;
 
@@ -137,7 +144,7 @@ function mostrarServicios(servicios) {
     });
 }
 
-function seleccionarServicio(servicio) {
+const seleccionarServicio = (servicio) => {
     const { id } = servicio;
     const { servicios } = cita;
 
@@ -156,11 +163,11 @@ function seleccionarServicio(servicio) {
     }
 }
 
-function nombreCliente() {
+const nombreCliente = () => {
     cita.nombre = document.querySelector('#nombre').value;
 }
 
-function seleccionarFecha(){
+const seleccionarFecha = () => {
     const inputFecha = document.querySelector('#fecha');
     inputFecha.addEventListener('input', function(e) {
 
@@ -175,7 +182,7 @@ function seleccionarFecha(){
     });
 }
 
-function seleccionarHora(){
+const seleccionarHora = () => {
     const inputHora = document.querySelector('#hora');
     inputHora.addEventListener('input', function(e){
 
@@ -190,7 +197,7 @@ function seleccionarHora(){
 
 }
 
-function mostrarAlerta (mensaje, tipo){
+const mostrarAlerta = (mensaje, tipo) => {
 
     //Previene que se generen más de 1 alerta
     const alertaPrevia = document.querySelector('.alerta');
@@ -209,4 +216,15 @@ function mostrarAlerta (mensaje, tipo){
     setTimeout(() => {
         alerta.remove();
     }, 3000);
+}
+
+const mostrarResumen = () => {
+    const resumen = document.querySelector('.contenido-resumen');
+
+    if(Object.values(cita).includes('')){
+        console.log('Hacen falta datos');
+    } else {
+        console.log('Todo bien');
+    }
+
 }
