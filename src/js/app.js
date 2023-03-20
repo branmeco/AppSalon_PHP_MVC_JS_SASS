@@ -302,5 +302,9 @@ const mostrarResumen = () => {
 }
 
 const reservarCita = () => {
-    console.log('first');
+    const datos = new FormData();
+
+    datos.append('nombre', 'Juan');
+
+    // console.log([...datos]);
 }
