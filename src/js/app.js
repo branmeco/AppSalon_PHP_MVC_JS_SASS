@@ -23,7 +23,7 @@ const iniciarApp = () => {
 
     consultarAPI(); // Consulta la API en el backend de PHP
 
-    idCliente(); 
+    idCliente();
     nombreCliente(); // Añade el nombre del cliente al objeto de cita
     seleccionarFecha(); //Añade la fecha de la cita en el objeto
     seleccionarHora(); //Añade la hora de la cita en el objeto
@@ -307,10 +307,10 @@ const mostrarResumen = () => {
     resumen.appendChild(botonReservar);
 }
 
-const reservarCita = async() => {
+const reservarCita = async () => {
 
-    const {nombre, fecha, hora, servicios, id} = cita;
-    
+    const { nombre, fecha, hora, servicios, id } = cita;
+
     const idServicios = servicios.map(servicio => servicio.id);
 
     const datos = new FormData();
@@ -318,16 +318,38 @@ const reservarCita = async() => {
     datos.append('fecha', fecha);
     datos.append('hora', hora);
     datos.append('servicios', idServicios);
-    
-    //Petición hacia la API
-    const url = 'http://localhost:3000/api/citas';
 
-    const respuesta = await fetch(url, {
-        method: 'POST',
-        body: datos
-    });
+    try {
+        //Petición hacia la API
+        const url = 'http://localhost:3000/api/citas';
 
-    const resultado = await respuesta.json();
-    console.log(resultado);
-    // console.log([...datos]);
+        const respuesta = await fetch(url, {
+            method: 'POST',
+            body: datos
+        });
+
+        const resultado = await respuesta.json();
+        console.log(resultado.resultado);
+
+        if (resultado.resultado) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Cita Creada',
+                text: 'Tu cita fue creada correctamente',
+                button: 'OK'
+            }).then(() => {
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000);
+            })
+        }
+        // console.log([...datos]);
+    } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Hubo un error al guardar la cita',
+            button: 'OK'
+        })
+    }
 }
