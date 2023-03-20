@@ -302,15 +302,16 @@ const mostrarResumen = () => {
 }
 
 const reservarCita = async() => {
-    const datos = new FormData();
 
+    const datos = new FormData();
     datos.append('nombre', 'Juan');
     
     //Petición hacia la API
     const url = 'http://localhost:3000/api/citas';
 
     const respuesta = await fetch(url, {
-        method: 'POST'
+        method: 'POST',
+        body: datos
     })
 
     const resultado = await respuesta.json();
