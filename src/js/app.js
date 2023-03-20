@@ -290,7 +290,7 @@ const mostrarResumen = () => {
 
     //Botón para crear una cita
     const botonReservar = document.createElement('BUTTON');
-    botonReservar.classList.add = ('boton');
+    botonReservar.classList.add('boton');
     botonReservar.textContent = 'Resercar cita';
     botonReservar.onclick = reservarCita;
 
@@ -301,10 +301,19 @@ const mostrarResumen = () => {
     resumen.appendChild(botonReservar);
 }
 
-const reservarCita = () => {
+const reservarCita = async() => {
     const datos = new FormData();
 
     datos.append('nombre', 'Juan');
+    
+    //Petición hacia la API
+    const url = 'http://localhost:3000/api/citas';
 
+    const respuesta = await fetch(url, {
+        method: 'POST'
+    })
+
+    const resultado = await respuesta.json();
+    console.log(resultado);
     // console.log([...datos]);
 }
