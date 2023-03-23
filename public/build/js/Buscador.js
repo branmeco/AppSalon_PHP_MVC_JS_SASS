@@ -1,0 +1,1 @@
+document.addEventListener("DOMContentLoaded",(function(){iniciarAp()}));const iniciarAp=()=>{buscarPorfecha()},buscarPorfecha=()=>{document.querySelector("#fecha").addEventListener("input",(function(e){e.target.value;window.location="fecha=$fechaSeleccionada"}))};
