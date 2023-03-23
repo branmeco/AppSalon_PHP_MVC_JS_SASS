@@ -15,7 +15,7 @@ include_once __DIR__ . '/../templates/barra.php';
 </div>
 
 <?php
-if(count($citas) === 0){
+if (count($citas) === 0) {
     echo "<h2>No hay citas en esta fecha</h2>";
 }
 ?>
@@ -48,6 +48,12 @@ if(count($citas) === 0){
                 if (esUltimo($actual, $proximo)) {
                 ?>
                     <p class="total">Total: <span><b><?php echo $total; ?></b></span></p>
+
+                    <form action="/api/eliminar" method="POST">
+                        <input type="hidden" name="id" value="<?php echo $cita->id; ?>">
+
+                        <input type="submit" class="boton-eliminar" value="Eliminar">
+                    </form>
             <?php
                 }
             } //fin de foreach 
@@ -56,5 +62,5 @@ if(count($citas) === 0){
 </div>
 
 <?php
-    $script = "<script src='build/js/Buscador.js'></script>"
+$script = "<script src='build/js/Buscador.js'></script>"
 ?>
