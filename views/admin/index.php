@@ -9,7 +9,7 @@ include_once __DIR__ . '/../templates/barra.php';
     <form class="formulario">
         <div class="campo">
             <label for="fecha">Fecha</label>
-            <input type="date" id="fecha" name="fecha" />
+            <input type="date" id="fecha" name="fecha" value="<?php echo $fecha; ?>"/>
         </div>
     </form>
 </div>
@@ -17,10 +17,10 @@ include_once __DIR__ . '/../templates/barra.php';
 <div class="citas-admin">
     <ul class="citas">
         <?php
-        $idCita = 0;
-        foreach ($citas as $key => $cita) {
-            if ($idCita !== $cita->id) {
-                $total = 0;
+            $idCita = 0;
+            foreach ($citas as $key => $cita) {
+                if ($idCita !== $cita->id) {
+                 $total = 0;
         ?>
                 <li>
                     <p>ID: <span><?php echo $cita->id; ?></span></p>
@@ -31,19 +31,20 @@ include_once __DIR__ . '/../templates/barra.php';
 
                     <h3>Servicios</h3>
                 <?php
-                $idCita = $cita->id;
-            } //fin de if 
-            $total += $cita->precio;
+                    $idCita = $cita->id;
+                } //fin de if 
+                $total += $cita->precio;
                 ?>
                 <p class="servicio"><?php echo $cita->servicio . " " . $cita->precio; ?></p>
                 <?php
-                $actual = $cita->id;
-                $proximo = $citas[$key + 1]->id ?? 0;
+                    $actual = $cita->id;
+                    $proximo = $citas[$key + 1]->id ?? 0;
 
-                if (esUltimo($actual, $proximo)) { ?>
+                    if (esUltimo($actual, $proximo)) {
+                ?>
                     <p class="total">Total: <span><b><?php echo $total; ?></b></span></p>
             <?php
-                }
+                    }
             } //fin de foreach 
             ?>
     </ul>
