@@ -48,7 +48,9 @@ class ServicioController
     {
         session_start();
         isAdmin();
+
         if (!is_numeric($_GET['id'])) return;
+
         $servicio = Servicio::find($_GET['id']);
         $alertas = [];
 
@@ -68,6 +70,7 @@ class ServicioController
             'alertas' => $alertas
         ]);
     }
+    
     public static function eliminar(Router $router)
     {
         session_start();
